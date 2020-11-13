@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monitorlibrary/api/sharedprefs.dart';
+import 'package:monitorlibrary/bloc/theme_bloc.dart';
 import 'package:monitorlibrary/data/user.dart';
 import 'package:monitorlibrary/functions.dart';
 
@@ -40,6 +41,14 @@ class _ProjectListMobileState extends State<ProjectListMobile>
             'Projects',
             style: Styles.whiteSmall,
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                themeBloc.changeToRandomTheme();
+              },
+            )
+          ],
           bottom: PreferredSize(
             child: Column(
               children: [
