@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:monitorlibrary/api/sharedprefs.dart';
+import 'package:monitorlibrary/data/user.dart';
 import 'package:monitorlibrary/functions.dart';
 
 class ProjectListMobile extends StatefulWidget {
@@ -9,11 +11,18 @@ class ProjectListMobile extends StatefulWidget {
 class _ProjectListMobileState extends State<ProjectListMobile>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  User user;
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    _getUser();
+  }
+
+  void _getUser() async {
+    user = await Prefs.getUser();
+    setState(() {});
   }
 
   @override
@@ -31,15 +40,36 @@ class _ProjectListMobileState extends State<ProjectListMobile>
             'Projects',
             style: Styles.whiteSmall,
           ),
+          bottom: PreferredSize(
+            child: Column(
+              children: [
+                Text(
+                  user == null ? 'Field Monitor' : user.name,
+                  style: Styles.whiteBoldMedium,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Field Monitor',
+                  style: Styles.blackSmall,
+                ),
+                SizedBox(
+                  height: 48,
+                ),
+              ],
+            ),
+            preferredSize: Size.fromHeight(240),
+          ),
         ),
         body: Center(
           child: Container(
-            color: Colors.brown[100],
+            color: Colors.brown[50],
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(24.0),
               child: Text(
                 'Project List',
-                style: Styles.blackBoldMedium,
+                style: Styles.pinkBoldMedium,
               ),
             ),
           ),
