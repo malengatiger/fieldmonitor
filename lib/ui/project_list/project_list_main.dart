@@ -1,8 +1,10 @@
-import 'package:fieldmonitor/ui/project_list_desktop.dart';
-import 'package:fieldmonitor/ui/project_list_mobile.dart';
-import 'package:fieldmonitor/ui/project_list_tablet.dart';
+import 'package:fieldmonitor/bloc.dart';
+import 'package:fieldmonitor/ui/project_list/project_list_desktop.dart';
+import 'package:fieldmonitor/ui/project_list/project_list_mobile.dart';
+import 'package:fieldmonitor/ui/project_list/project_list_tablet.dart';
 import 'package:flutter/material.dart';
 import 'package:monitorlibrary/auth/app_auth.dart';
+import 'package:monitorlibrary/data/user.dart';
 import 'package:monitorlibrary/functions.dart';
 import 'package:monitorlibrary/ui/signin.dart';
 import 'package:page_transition/page_transition.dart';
@@ -37,14 +39,24 @@ class _ProjectListMainState extends State<ProjectListMain>
     var signeIn = await AppAuth.isUserSignedIn();
     pp('ProjectList: 🥦🥦 is user signed in? $signeIn : 🔐 if false, go sign in ...');
     if (!signeIn) {
-      Navigator.push(
+      var result = await Navigator.push(
           context,
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
               duration: Duration(seconds: 1),
               child: SignIn(widget.type)));
+      if (result != null) {
+        if (result is User) {
+          monitorBloc.getOrganizationProjects(
+              organizationId: result.organizationId);
+        }
+        setState(() {
+          isBusy = false;
+        });
+      }
     }
+
     setState(() {
       isBusy = false;
     });
